@@ -7,7 +7,7 @@
 
 <p>This component demonstrates fetching data from the server.</p>
 
-@if (forecasts == null)
+@if (forecastDays == null)
 {
     <p><em>Loading...</em></p>
 }
@@ -17,42 +17,43 @@ else
         <thead>
             <tr>
                 <th>Date</th>
-                <th>Temp. (C)</th>
-                <th>Temp. (F)</th>
-                <th>Summary</th>
+                <th>Temp</th>
+                <th>Condition</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var forecast in forecasts)
+            @foreach (var day in forecastDays)
             {
                 <tr>
-                    <td>@forecast.Date.ToShortDateString()</td>
-                    <td>@forecast.TemperatureC</td>
-                    <td>@forecast.TemperatureF</td>
-                    <td>@forecast.Summary</td>
+                    <td>@day.Date.ToShortDateString()</td>
+                    <td>@day.Day.AvgTemp</td>
+                    <td>@day.Day.Condition.Text</td>
                 </tr>
             }
         </tbody>
     </table>
 }
 
+
+@if(astro != null)
+{
+    <div>sunrise : @astro.Sunrise</div>
+    <div>sunset : @astro.Sunset</div>
+    <div>moon phase : @astro.MoonPhase</div>
+    <div>moon illum : @astro.MoonIllumination</div>
+}
+
 @code {
-    private WeatherForecast[]? forecasts;
+    private ForecastDayDto[]? forecastDays;
+    private AstroDto? astro;
 
     protected override async Task OnInitializedAsync()
     {
-       
-        forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("sample-data/weather.json");
-    }
 
-    public class WeatherForecast
-    {
-        public DateTime Date { get; set; }
+        var forecast = await Http.GetFromJsonAsync<ForecastDto>("https://api.weatherapi.com/v1/forecast.json?&q=Volgograd&days=7");
+        forecastDays = forecast.ForecastInfo.ForecastDays;
 
-        public int TemperatureC { get; set; }
-
-        public string? Summary { get; set; }
-
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+        var astronomy = await Http.GetFromJsonAsync<AstronomyDto>("https://api.weatherapi.com/v1/astronomy.json?&q=Volgograd");
+        astro = astronomy.AstronomyInfo.Astro;
     }
 }
