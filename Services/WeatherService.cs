@@ -8,7 +8,7 @@ namespace WeatherApp.Services
     public class WeatherService
     {
         private readonly HttpClient _httpClient;
-        private WeatherOptions _options;
+        private readonly WeatherOptions _options;
 
         public WeatherService(WeatherOptions options, HttpClient client)
         {

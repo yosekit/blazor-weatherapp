@@ -10,10 +10,9 @@ builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // api options
-var configApi = builder.Configuration.GetSection("API");
-builder.Services.AddSingleton(configApi.GetSection(nameof(WeatherOptions)).Get<WeatherOptions>());
-builder.Services.AddSingleton(configApi.GetSection(nameof(CountriesOptions)).Get<CountriesOptions>());
-// ...
+var sectionApi = builder.Configuration.GetSection("Api");
+builder.Services.AddSingleton(sectionApi.GetSection(WeatherOptions.Key).Get<WeatherOptions>());
+builder.Services.AddSingleton(sectionApi.GetSection(CountriesOptions.Key).Get<CountriesOptions>());
 
 // http clients
 builder.Services.AddHttpClient<WeatherService>((sp, client) =>

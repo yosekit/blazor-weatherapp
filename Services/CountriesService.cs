@@ -8,7 +8,7 @@ namespace WeatherApp.Services
     public class CountriesService
     {
         private readonly HttpClient _httpClient;
-        private CountriesOptions _countriesOptions;
+        private readonly CountriesOptions _countriesOptions;
 
         public CountriesService(HttpClient httpClient, CountriesOptions countriesOptions)
         {
