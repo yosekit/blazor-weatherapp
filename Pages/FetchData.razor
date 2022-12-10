@@ -1,5 +1,5 @@
 ﻿@page "/fetchdata"
-@inject HttpClient Http
+@inject WeatherService Weather
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -49,11 +49,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
+        var responseF = await Weather.GetForecast();
+        forecastDays = responseF.ForecastInfo.ForecastDays;
 
-        var forecast = await Http.GetFromJsonAsync<ForecastDto>("https://api.weatherapi.com/v1/forecast.json?&q=Volgograd&days=7");
-        forecastDays = forecast.ForecastInfo.ForecastDays;
-
-        var astronomy = await Http.GetFromJsonAsync<AstronomyDto>("https://api.weatherapi.com/v1/astronomy.json?&q=Volgograd");
-        astro = astronomy.AstronomyInfo.Astro;
+        var responseA = await Weather.GetAstronomy();
+        astro = responseA.AstronomyInfo.Astro;
     }
 }
