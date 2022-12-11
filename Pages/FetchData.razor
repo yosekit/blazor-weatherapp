@@ -49,10 +49,10 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        var responseF = await Weather.GetForecast();
+        var responseF = await Weather.GetForecastAsync("Volgograd", 7);
         forecastDays = responseF.ForecastInfo.ForecastDays;
 
-        var responseA = await Weather.GetAstronomy();
+        var responseA = await Weather.GetAstronomyAsync("Volgograd");
         astro = responseA.AstronomyInfo.Astro;
     }
 }
