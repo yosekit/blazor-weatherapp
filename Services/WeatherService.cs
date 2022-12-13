@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Nodes;
 using System.Net.Http.Json;
-using Microsoft.AspNetCore.WebUtilities;
 
 using WeatherApp.Options;
 using WeatherApp.Models.Dto;
+using WeatherApp.Infrastructure.Services;
 
 namespace WeatherApp.Services
 {
@@ -18,7 +18,7 @@ namespace WeatherApp.Services
             _httpClient = client;
         }
 
-        public async Task<T> GetAsync<T>(Uri uri)
+        public async Task<T> GetAsync<T>(string uri)
         {
             try
             {
@@ -48,43 +48,34 @@ namespace WeatherApp.Services
             }
         }
 
-        public async Task<ForecastDto> GetForecastAsync(string location, int days)
+        public async Task<ForecastDto> GetForecastAsync(string q, int days)
         {
-            var parameters = new Dictionary<string, string>
-            {
-                // API key auth
-                { "auth_key", "auth_value" },
+            var queryBuilder = new QueryStringBuilder();
 
-                { "q", location},
-                { "days", days.ToString() }
-            };
+            queryBuilder.Add(nameof(q), q);
+            queryBuilder.Add(nameof(days), days.ToString());
+
+            AddAuthQuery(queryBuilder);
 
             return await GetAsync<ForecastDto>(
-                BuildUri(_options.ForecastEndpoint, parameters));
+                _options.ForecastEndpoint + queryBuilder.Build());
         }
 
-        public async Task<AstronomyDto> GetAstronomyAsync(string location)
+        public async Task<AstronomyDto> GetAstronomyAsync(string q)
         {
-            var parameters = new Dictionary<string, string>
-            {
-                // API key auth
-                { "auth_key", "auth_value" },
+            var queryBuilder = new QueryStringBuilder();
 
-                { "q", location}
-            };
+            queryBuilder.Add(nameof(q), q);
+
+            AddAuthQuery(queryBuilder);
 
             return await GetAsync<AstronomyDto>(
-                BuildUri(_options.AstronomyEndpoint, parameters));
+                _options.AstronomyEndpoint + queryBuilder.Build());
         }
 
-        private Uri BuildUri(string endpoint, IDictionary<string, string> queryParams)
+        private void AddAuthQuery(QueryStringBuilder builder)
         {
-            string uri = _httpClient.BaseAddress + endpoint;
-
-            uri = QueryHelpers.AddQueryString(uri, queryParams);
-
-            var builder = new UriBuilder(uri);
-            return builder.Uri;
+            builder.Add("auth_key", "auth_value");
         }
     }
 }
