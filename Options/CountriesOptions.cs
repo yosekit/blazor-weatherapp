@@ -2,9 +2,9 @@
 {
     public class CountriesOptions
     {
-        public const string Key = "Countries";
+        public const string JsonName = "Countries";
 
-        public string BaseUrl { get; set; } = String.Empty;
-        public string CitiesEndpoint { get; set; } = String.Empty;
+        public string? BaseUrl { get; set; }
+        public string? CitiesEndpoint { get; set; }
     }
 }

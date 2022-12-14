@@ -2,10 +2,11 @@
 {
     public class WeatherOptions
     {
-        public const string Key = "Weather"; 
+        public const string JsonName = "Weather"; 
 
-        public string BaseUrl { get; set; } = String.Empty;
-        public string ForecastEndpoint { get; set; } = String.Empty;
-        public string AstronomyEndpoint { get; set; } = String.Empty;
+        public string? BaseUrl { get; set; }
+        public string? ForecastEndpoint { get; set; }
+        public string? AstronomyEndpoint { get; set; }
+
     }
 }

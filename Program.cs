@@ -11,8 +11,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 
 // api options
 var sectionApi = builder.Configuration.GetSection("Api");
-builder.Services.AddSingleton(sectionApi.GetSection(WeatherOptions.Key).Get<WeatherOptions>());
-builder.Services.AddSingleton(sectionApi.GetSection(CountriesOptions.Key).Get<CountriesOptions>());
+builder.Services.AddSingleton(sectionApi.GetSection(WeatherOptions.JsonName).Get<WeatherOptions>());
+builder.Services.AddSingleton(sectionApi.GetSection(CountriesOptions.JsonName).Get<CountriesOptions>());
 
 // http clients
 builder.Services.AddHttpClient<WeatherService>((sp, client) =>
@@ -24,4 +24,4 @@ builder.Services.AddHttpClient<CountriesService>((sp, client) =>
     client.BaseAddress = new Uri(sp.GetRequiredService<CountriesOptions>().BaseUrl);
 });
 
-await builder.Build().RunAsync() ;
+await builder.Build().RunAsync();
