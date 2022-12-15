@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.WebUtilities;
 
-namespace WeatherApp.Client.Infrastructure.Services
+namespace WeatherApp.Infrastructure.Services
 {
     public class QueryStringBuilder
     {

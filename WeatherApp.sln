@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Client", "Client\WeatherApp.Client.csproj", "{991D3F98-CC1B-4BAF-8C20-695710837472}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp", "WeatherApp\WeatherApp.csproj", "{991D3F98-CC1B-4BAF-8C20-695710837472}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Server", "Server\WeatherApp.Server.csproj", "{9ADD31D3-7E2F-43A3-A5ED-1754F81C1AA2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Api", "WeatherApp.Api\WeatherApp.Api.csproj", "{9ADD31D3-7E2F-43A3-A5ED-1754F81C1AA2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

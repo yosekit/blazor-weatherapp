@@ -1,11 +1,11 @@
 ﻿using System.Text.Json.Nodes;
 using System.Net.Http.Json;
 
-using WeatherApp.Client.Options;
-using WeatherApp.Client.Models.Dto;
-using WeatherApp.Client.Infrastructure.Services;
+using WeatherApp.Options;
+using WeatherApp.Models.Dto;
+using WeatherApp.Infrastructure.Services;
 
-namespace WeatherApp.Client.Services
+namespace WeatherApp.Services
 {
     public class WeatherService
     {
