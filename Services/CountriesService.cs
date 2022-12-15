@@ -1,9 +1,9 @@
 ﻿using System.Net.Http.Json;
 
-using WeatherApp.Options;
-using WeatherApp.Models.Dto;
+using WeatherApp.Client.Options;
+using WeatherApp.Client.Models.Dto;
 
-namespace WeatherApp.Services
+namespace WeatherApp.Client.Services
 {
     public class CountriesService
     {

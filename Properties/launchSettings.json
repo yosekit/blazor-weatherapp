@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "WeatherApp": {
+    "WeatherApp.Client": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

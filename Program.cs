@@ -1,9 +1,9 @@
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
-using Microsoft.Extensions.Http;
-using WeatherApp;
-using WeatherApp.Options;
-using WeatherApp.Services;
+
+using WeatherApp.Client;
+using WeatherApp.Client.Options;
+using WeatherApp.Client.Services;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
