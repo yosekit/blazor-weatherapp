@@ -55,8 +55,6 @@ namespace WeatherApp.Client.Services
             queryBuilder.Add(nameof(q), q);
             queryBuilder.Add(nameof(days), days.ToString());
 
-            AddAuthQuery(queryBuilder);
-
             return await GetAsync<ForecastDto>(
                 _options.ForecastEndpoint + queryBuilder.Build());
         }
@@ -67,15 +65,8 @@ namespace WeatherApp.Client.Services
 
             queryBuilder.Add(nameof(q), q);
 
-            AddAuthQuery(queryBuilder);
-
             return await GetAsync<AstronomyDto>(
                 _options.AstronomyEndpoint + queryBuilder.Build());
-        }
-
-        private void AddAuthQuery(QueryStringBuilder builder)
-        {
-            builder.Add("auth_key", "auth_value");
         }
     }
 }
