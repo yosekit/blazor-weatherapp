@@ -1,22 +1,54 @@
 using Microsoft.AspNetCore.Mvc;
 
+using AspNetCore.Proxy;
+using AspNetCore.Proxy.Options;
+
+using WeatherApp.Api.Settings;
+
 namespace WeatherApp.Api.Controllers
 {
     [ApiController]
-    [Route("api/forecast")]
+    [Route("api/weather")]
     public class WeatherForecastController : ControllerBase
     {
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly WeatherSettings _settings;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        private HttpProxyOptions _proxyOptions = HttpProxyOptionsBuilder.Instance
+            .WithHttpClientName("Weather")
+            .WithBeforeSend((context, message) =>
+            {
+                var settings = context.RequestServices.GetRequiredService<WeatherSettings>();
+                context.Request.QueryString.Add(settings.Auth!.Key!, settings.Auth!.Value!);
+
+                /*message.RequestUri = new Uri(
+                    message.RequestUri!.ToString() +
+                    $"?{settings.Auth!.Key}={settings.Auth!.Value}");*/
+
+                return Task.CompletedTask;
+            })
+            .Build();
+
+        public WeatherForecastController(
+            ILogger<WeatherForecastController> logger, WeatherSettings settings)
         {
             _logger = logger;
+            _settings = settings;
         }
 
         [HttpGet]
-        public string Get([FromQuery]string q, [FromQuery]int days)
+        [Route("/forecast")]
+        public Task GetForecast()
         {
-            return "api_response";
+            _logger.LogInformation("FORECAST: " + _settings.Forecast + Request.QueryString.Value);
+            return this.HttpProxyAsync(_settings.Forecast + Request.QueryString.Value, _proxyOptions);
+        }
+
+        [HttpGet]
+        [Route("/astronomy")]
+        public Task GetAstronomy()
+        {
+            return this.HttpProxyAsync(_settings.Astronomy + Request.QueryString.Value, _proxyOptions);
         }
     }
 }
