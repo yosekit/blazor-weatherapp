@@ -31,11 +31,22 @@ builder.Services.AddProxies();
 // controllers
 builder.Services.AddControllers();
 
+// cors
+builder.Services.AddCors(options => options.AddPolicy("WeatherApp",
+    builder =>
+    {
+        builder.WithOrigins("https://localhost:7114")
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
+
+app.UseCors("WeatherApp");
 
 app.UseAuthorization();
 
