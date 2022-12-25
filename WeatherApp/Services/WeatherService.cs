@@ -12,13 +12,34 @@ namespace WeatherApp.Services
         private readonly HttpClient _httpClient;
         private readonly WeatherOptions _options;
 
-        public WeatherService(WeatherOptions options, HttpClient client)
+        public WeatherService(HttpClient client, WeatherOptions options)
         {
-            _options = options;
             _httpClient = client;
+            _options = options;
         }
 
-        public async Task<T> GetAsync<T>(string uri)
+        public async Task<ForecastDto> GetForecastAsync(string q, int days)
+        {
+            var queryBuilder = new QueryStringBuilder();
+
+            queryBuilder.Add(nameof(q), q);
+            queryBuilder.Add(nameof(days), days.ToString());
+
+            return await GetAsync<ForecastDto>(
+                _options.Forecast + queryBuilder.Build());
+        }
+
+        public async Task<AstronomyDto> GetAstronomyAsync(string q)
+        {
+            var queryBuilder = new QueryStringBuilder();
+
+            queryBuilder.Add(nameof(q), q);
+
+            return await GetAsync<AstronomyDto>(
+                _options.Astronomy + queryBuilder.Build());
+        }
+
+        private async Task<T> GetAsync<T>(string uri)
         {
             try
             {
@@ -46,27 +67,6 @@ namespace WeatherApp.Services
                 //Log exception
                 throw;
             }
-        }
-
-        public async Task<ForecastDto> GetForecastAsync(string q, int days)
-        {
-            var queryBuilder = new QueryStringBuilder();
-
-            queryBuilder.Add(nameof(q), q);
-            queryBuilder.Add(nameof(days), days.ToString());
-
-            return await GetAsync<ForecastDto>(
-                _options.ForecastEndpoint + queryBuilder.Build());
-        }
-
-        public async Task<AstronomyDto> GetAstronomyAsync(string q)
-        {
-            var queryBuilder = new QueryStringBuilder();
-
-            queryBuilder.Add(nameof(q), q);
-
-            return await GetAsync<AstronomyDto>(
-                _options.AstronomyEndpoint + queryBuilder.Build());
         }
     }
 }

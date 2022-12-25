@@ -4,9 +4,7 @@
     {
         public const string JsonName = "Weather"; 
 
-        public string? BaseUrl { get; set; }
-        public string? ForecastEndpoint { get; set; }
-        public string? AstronomyEndpoint { get; set; }
-
+        public string? Forecast { get; set; }
+        public string? Astronomy { get; set; }
     }
 }
