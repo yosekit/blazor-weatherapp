@@ -4,12 +4,12 @@
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
     "iisExpress": {
-      "applicationUrl": "https://localhost/api",
+      "applicationUrl": "http://localhost:3756",
       "sslPort": 44304
     }
   },
   "profiles": {
-    "WeatherApp.Api": {
+    "WeatherApp.Server": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
@@ -19,7 +19,6 @@
     },
     "IIS Express": {
       "commandName": "IISExpress",
-      "launchUrl": "https://localhost/api",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
