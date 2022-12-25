@@ -19,11 +19,10 @@ namespace WeatherApp.Api.Controllers
             .WithBeforeSend((context, message) =>
             {
                 var settings = context.RequestServices.GetRequiredService<WeatherSettings>();
-                context.Request.QueryString.Add(settings.Auth!.Key!, settings.Auth!.Value!);
 
-                /*message.RequestUri = new Uri(
-                    message.RequestUri!.ToString() +
-                    $"?{settings.Auth!.Key}={settings.Auth!.Value}");*/
+                // Add to query params API key auth 
+                message.RequestUri = new Uri(message.RequestUri + context.Request.QueryString.Add(
+                        settings.Auth!.Key!, settings.Auth!.Value!).Value);
 
                 return Task.CompletedTask;
             })
@@ -37,18 +36,17 @@ namespace WeatherApp.Api.Controllers
         }
 
         [HttpGet]
-        [Route("/forecast")]
+        [Route("forecast")]
         public Task GetForecast()
         {
-            _logger.LogInformation("FORECAST: " + _settings.Forecast + Request.QueryString.Value);
-            return this.HttpProxyAsync(_settings.Forecast + Request.QueryString.Value, _proxyOptions);
+            return this.HttpProxyAsync(_settings.Forecast, _proxyOptions);
         }
 
         [HttpGet]
-        [Route("/astronomy")]
+        [Route("astronomy")]
         public Task GetAstronomy()
         {
-            return this.HttpProxyAsync(_settings.Astronomy + Request.QueryString.Value, _proxyOptions);
+            return this.HttpProxyAsync(_settings.Astronomy, _proxyOptions);
         }
     }
 }
