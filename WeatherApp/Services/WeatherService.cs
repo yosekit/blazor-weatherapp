@@ -43,7 +43,7 @@ namespace WeatherApp.Services
         {
             try
             {
-                var response = await _httpClient.GetAsync(_httpClient.BaseAddress + uri);
+                var response = await _httpClient.GetAsync(uri);
 
                 if (response.IsSuccessStatusCode)
                 {
