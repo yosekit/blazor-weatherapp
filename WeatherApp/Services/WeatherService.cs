@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 
 using WeatherApp.Options;
-using WeatherApp.Infrastructure.Services;
+using WeatherApp.Shared.Services;
 using WeatherApp.Models.Dto.Forecast;
 using WeatherApp.Models.Dto.Astronomy;
 

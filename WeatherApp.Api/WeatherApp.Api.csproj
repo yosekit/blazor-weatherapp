@@ -11,4 +11,8 @@
     <PackageReference Include="AspNetCore.Proxy" Version="4.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\WeatherApp.Shared\WeatherApp.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
