@@ -2,8 +2,9 @@
 using System.Net.Http.Json;
 
 using WeatherApp.Options;
-using WeatherApp.Models.Dto;
 using WeatherApp.Infrastructure.Services;
+using WeatherApp.Models.Dto.Forecast;
+using WeatherApp.Models.Dto.Astronomy;
 
 namespace WeatherApp.Services
 {
