@@ -1,5 +1,6 @@
 ﻿@page "/fetchdata"
 @inject WeatherService Weather
+@inject CountriesService Countries
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -9,50 +10,64 @@
 
 @if (forecastDays == null)
 {
-    <p><em>Loading...</em></p>
+	<p><em>Loading...</em></p>
 }
 else
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Date</th>
-                <th>Temp</th>
-                <th>Condition</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var day in forecastDays)
-            {
-                <tr>
-                    <td>@day.Date.ToShortDateString()</td>
-                    <td>@day.Day.AvgTemp</td>
-                    <td>@day.Day.Condition.Text</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Date</th>
+				<th>Temp</th>
+				<th>Condition</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var day in forecastDays)
+			{
+				<tr>
+					<td>@day.Date.ToShortDateString()</td>
+					<td>@day.Day.AvgTemp</td>
+					<td>@day.Day.Condition.Text</td>
+				</tr>
+			}
+		</tbody>
+	</table>
 }
 
 
-@if(astro != null)
+@if (astro != null)
 {
-    <div>sunrise : @astro.Sunrise</div>
-    <div>sunset : @astro.Sunset</div>
-    <div>moon phase : @astro.MoonPhase</div>
-    <div>moon illum : @astro.MoonIllumination</div>
+	<div>sunrise : @astro.Sunrise</div>
+	<div>sunset : @astro.Sunset</div>
+	<div>moon phase : @astro.MoonPhase</div>
+	<div>moon illum : @astro.MoonIllumination</div>
+}
+
+<h1>Cities</h1>
+<br />
+@if (cities != null)
+{
+	@for (int i = 0; i < 5; i++)
+	{
+		@cities.Cities[i]	
+	}
 }
 
 @code {
-    private ForecastDayDto[]? forecastDays;
-    private AstroDto? astro;
+	private ForecastDayDto[]? forecastDays;
+	private AstroDto? astro;
 
-    protected override async Task OnInitializedAsync()
-    {
-        var responseF = await Weather.GetForecastAsync("Volgograd", 7);
-        forecastDays = responseF.ForecastInfo.ForecastDays;
+	private CitiesDto? cities;
 
-        var responseA = await Weather.GetAstronomyAsync("Volgograd");
-        astro = responseA.AstronomyInfo.Astro;
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		var responseF = await Weather.GetForecastAsync("Volgograd", 7);
+		forecastDays = responseF.ForecastInfo.ForecastDays;
+
+		var responseA = await Weather.GetAstronomyAsync("Volgograd");
+		astro = responseA.AstronomyInfo.Astro;
+
+		cities = await Countries.GetCitiesAsync("Nigeria");
+	}
 }
