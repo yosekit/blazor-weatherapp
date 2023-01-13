@@ -11,6 +11,11 @@ namespace WeatherApp.Shared.Services
             _params = new Dictionary<string, string>();
         }
 
+        public QueryStringBuilder(IDictionary<string, string> @params)
+        {
+            _params = @params;
+        }
+
         public void Add(string key, string value)
         {
             _params.TryAdd(key, value);

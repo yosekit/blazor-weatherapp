@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "WeatherApp.Server": {
+    "WeatherApp.Api": {
       "commandName": "Project",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"

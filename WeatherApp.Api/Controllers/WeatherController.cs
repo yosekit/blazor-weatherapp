@@ -4,6 +4,7 @@ using AspNetCore.Proxy;
 using AspNetCore.Proxy.Options;
 
 using WeatherApp.Api.Settings;
+using WeatherApp.Shared.Services;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -20,10 +21,17 @@ namespace WeatherApp.Api.Controllers
             {
                 var settings = context.RequestServices.GetRequiredService<WeatherSettings>();
 
-                // Add to query params API key auth 
-                message.RequestUri = new Uri(message.RequestUri + context.Request.QueryString.Add(
-                        settings.Auth!.Key!, settings.Auth!.Value!).Value);
+                var queryBuilder = new QueryStringBuilder(
+                    QueryStringHelper.Parse(message.RequestUri.Query));
 
+                // Add API key auth
+                queryBuilder.Add(settings.Auth!.Key!, settings.Auth!.Value!);
+                // Add required param for all APIs
+                queryBuilder.Add("q", context.Request.Query["city"]);
+
+                message.RequestUri = new Uri(
+                    message.RequestUri.GetLeftPart(UriPartial.Path) + queryBuilder.Build());
+                
                 return Task.CompletedTask;
             })
             .Build();
@@ -37,14 +45,20 @@ namespace WeatherApp.Api.Controllers
 
         [HttpGet]
         [Route("forecast")]
-        public Task GetForecast()
+        public Task GetForecast([FromQuery] string city)
         {
-            return this.HttpProxyAsync(_settings.Forecast, _proxyOptions);
+            var queryBuilder = new QueryStringBuilder();
+
+            queryBuilder.Add("days", "14");
+            queryBuilder.Add("aqi", "no");
+            queryBuilder.Add("alerts", "no");
+
+            return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptions);
         }
 
         [HttpGet]
         [Route("astronomy")]
-        public Task GetAstronomy()
+        public Task GetAstronomy([FromQuery] string city)
         {
             return this.HttpProxyAsync(_settings.Astronomy, _proxyOptions);
         }

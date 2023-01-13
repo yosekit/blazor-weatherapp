@@ -19,22 +19,21 @@ namespace WeatherApp.Services
             _options = options;
         }
 
-        public async Task<ForecastDto> GetForecastAsync(string q, int days)
+        public async Task<ForecastDto> GetForecastAsync(string city)
         {
             var queryBuilder = new QueryStringBuilder();
 
-            queryBuilder.Add(nameof(q), q);
-            queryBuilder.Add(nameof(days), days.ToString());
+            queryBuilder.Add(nameof(city), city);
 
             return await GetAsync<ForecastDto>(
                 _options.Forecast + queryBuilder.Build());
         }
 
-        public async Task<AstronomyDto> GetAstronomyAsync(string q)
+        public async Task<AstronomyDto> GetAstronomyAsync(string city)
         {
             var queryBuilder = new QueryStringBuilder();
-
-            queryBuilder.Add(nameof(q), q);
+            
+            queryBuilder.Add(nameof(city), city);
 
             return await GetAsync<AstronomyDto>(
                 _options.Astronomy + queryBuilder.Build());

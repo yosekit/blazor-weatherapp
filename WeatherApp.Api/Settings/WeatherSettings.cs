@@ -7,7 +7,7 @@
         public string? BaseUrl { get; set; }
         public string? Forecast { get; set; }
         public string? Astronomy { get; set; }
-
+        public string? DateFormat { get; set; }
         public WeatherAuthSettings? Auth { get; set; }
     }
 
