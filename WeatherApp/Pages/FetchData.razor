@@ -65,9 +65,9 @@ else
 		var responseF = await Weather.GetForecastAsync("Volgograd");
 		forecastDays = responseF.ForecastInfo.ForecastDays;
 
-		var responseA = await Weather.GetAstronomyAsync("Volgograd", DateTime.Today);
+		var responseA = await Weather.GetAstronomyAsync("Volgograd");
 		astro = responseA.AstronomyInfo.Astro;
 
-		cities = await Countries.GetCitiesAsync("Nigeria");
+		cities = await Countries.GetCitiesOfCountryAsync("Russia");
 	}
 }

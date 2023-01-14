@@ -29,7 +29,39 @@ namespace WeatherApp.Api.Controllers
         [Route("cities")]
         public Task GetCitiesOfCountry([FromQuery]string country)
         {
-            return this.HttpProxyAsync(_settings.Cities, _proxyOptionsBuilder
+            return this.HttpProxyAsync(_settings.CitiesOfCountry, _proxyOptionsBuilder
+                .WithBeforeSend((context, message) =>
+                {
+                    message.Method = HttpMethod.Post;
+                    message.Content = JsonContent.Create(
+                        QueryStringHelper.Parse(context.Request.QueryString.Value));
+
+                    return Task.CompletedTask;
+                })
+            .Build());
+        }
+
+        [HttpGet]
+        [Route("state/cities")]
+        public Task GetCitiesInState([FromQuery]string country, [FromQuery]string state)
+        {
+            return this.HttpProxyAsync(_settings.CitiesInState, _proxyOptionsBuilder
+                .WithBeforeSend((context, message) =>
+                {
+                    message.Method = HttpMethod.Post;
+                    message.Content = JsonContent.Create(
+                        QueryStringHelper.Parse(context.Request.QueryString.Value));
+
+                    return Task.CompletedTask;
+                })
+            .Build());
+        }
+
+        [HttpGet]
+        [Route("states")]
+        public Task GetStatesOfCountry([FromQuery] string country)
+        {
+            return this.HttpProxyAsync(_settings.StatesOfCountry, _proxyOptionsBuilder
                 .WithBeforeSend((context, message) =>
                 {
                     message.Method = HttpMethod.Post;

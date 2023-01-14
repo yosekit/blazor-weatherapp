@@ -20,17 +20,17 @@ namespace WeatherApp.Services
             _logger = logger;
         }
 
-        public async Task<CitiesDto> GetCitiesAsync(string country)
+        public async Task<CitiesDto> GetCitiesOfCountryAsync(string country)
         {
             var queryBuilder = new QueryStringBuilder();
 
             queryBuilder.Add(nameof(country), country);
 
             return await GetAsync<CitiesDto>(
-                _options.Cities + queryBuilder.Build());
+                _options.CitiesOfCountry + queryBuilder.Build());
         }
 
-        public async Task<CitiesDto> GetCitiesAsync(string country, string state)
+        public async Task<CitiesDto> GetCitiesInStateAsync(string country, string state)
         {
             var queryBuilder = new QueryStringBuilder();
 
@@ -38,7 +38,7 @@ namespace WeatherApp.Services
             queryBuilder.Add(nameof(state), state);
 
             return await GetAsync<CitiesDto>(
-                _options.CitiesByState + queryBuilder.Build());
+                _options.CitiesInState + queryBuilder.Build());
         }
 
         private async Task<T> GetAsync<T>(string uri)
