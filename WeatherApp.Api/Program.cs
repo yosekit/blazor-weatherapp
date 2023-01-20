@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Cors;
 using AspNetCore.Proxy;
 
 using WeatherApp.Api.Settings;
+using WeatherApp.Api.Mapping;
+using WeatherApp.Api.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +26,12 @@ builder.Services.AddHttpClient("Countries", (sp, client) =>
 {
     client.BaseAddress = new Uri(sp.GetRequiredService<CountriesSettings>().BaseUrl!);
 });
+
+//utilities
+builder.Services.AddScoped<WeatherResponseProducer>();
+
+// automapper
+builder.Services.AddAutoMapper(typeof(WeatherProfile));
 
 // proxy
 builder.Services.AddProxies();

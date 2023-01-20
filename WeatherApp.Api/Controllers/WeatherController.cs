@@ -3,8 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 using AspNetCore.Proxy;
 using AspNetCore.Proxy.Options;
 
-using WeatherApp.Api.Settings;
 using WeatherApp.Shared.Services;
+using WeatherApp.Api.Settings;
+using WeatherApp.Api.Utilities;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -15,7 +16,7 @@ namespace WeatherApp.Api.Controllers
         private readonly ILogger<WeatherController> _logger;
         private readonly WeatherSettings _settings;
 
-        private HttpProxyOptions _proxyOptions = HttpProxyOptionsBuilder.Instance
+        private IHttpProxyOptionsBuilder _proxyOptionsBuilder = HttpProxyOptionsBuilder.Instance
             .WithHttpClientName("Weather")
             .WithBeforeSend((context, message) =>
             {
@@ -31,10 +32,9 @@ namespace WeatherApp.Api.Controllers
 
                 message.RequestUri = new Uri(
                     message.RequestUri.GetLeftPart(UriPartial.Path) + queryBuilder.Build());
-                
+
                 return Task.CompletedTask;
-            })
-            .Build();
+            });
 
         public WeatherController(
             ILogger<WeatherController> logger, WeatherSettings settings)
@@ -53,14 +53,24 @@ namespace WeatherApp.Api.Controllers
             queryBuilder.Add("aqi", "no");
             queryBuilder.Add("alerts", "no");
 
-            return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptions);
+            return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptionsBuilder
+                .WithAfterReceive((context, message) =>
+                {
+                    message = context.RequestServices.GetRequiredService<WeatherResponseProducer>()
+                    .FromMessage(message)
+                    .EditConditions()
+                    .Produce();
+
+                    return Task.CompletedTask;
+                })
+            .Build());
         }
 
         [HttpGet]
         [Route("astronomy")]
         public Task GetAstronomy([FromQuery] string city)
         {
-            return this.HttpProxyAsync(_settings.Astronomy, _proxyOptions);
+            return this.HttpProxyAsync(_settings.Astronomy, _proxyOptionsBuilder.Build());
         }
     }
 }
