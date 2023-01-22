@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using AspNetCore.Proxy;
 using AspNetCore.Proxy.Options;
 
-using WeatherApp.Shared.Services;
+using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
 using WeatherApp.Api.Utilities;
+using WeatherApp.Api.Models.Dtos;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -15,6 +16,7 @@ namespace WeatherApp.Api.Controllers
     {
         private readonly ILogger<WeatherController> _logger;
         private readonly WeatherSettings _settings;
+        private readonly ForecastConditionDtoCreator _conditionCreator;
 
         private IHttpProxyOptionsBuilder _proxyOptionsBuilder = HttpProxyOptionsBuilder.Instance
             .WithHttpClientName("Weather")
@@ -37,10 +39,11 @@ namespace WeatherApp.Api.Controllers
             });
 
         public WeatherController(
-            ILogger<WeatherController> logger, WeatherSettings settings)
+            ILogger<WeatherController> logger, WeatherSettings settings, ForecastConditionDtoCreator creator)
         {
             _logger = logger;
             _settings = settings;
+            _conditionCreator = creator;
         }
 
         [HttpGet]
@@ -56,14 +59,20 @@ namespace WeatherApp.Api.Controllers
             return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptionsBuilder
                 .WithAfterReceive((context, message) =>
                 {
-                    message = context.RequestServices.GetRequiredService<WeatherResponseProducer>()
-                    .FromMessage(message)
-                    .EditConditions()
-                    .Produce();
+                    var modifier = context.RequestServices.GetRequiredService<ForecastContentModifier>();
+
+                    message.Content = modifier.ModifyConditions(message.Content);
 
                     return Task.CompletedTask;
                 })
             .Build());
+        }
+
+        [HttpGet]
+        [Route("forecast/conditions")]
+        public IEnumerable<ForecastConditionDto> GetAllForecastConditions()
+        {
+            return _conditionCreator.GetAll();
         }
 
         [HttpGet]

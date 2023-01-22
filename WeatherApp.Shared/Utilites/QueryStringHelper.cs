@@ -1,6 +1,6 @@
 ﻿using System.Web;
 
-namespace WeatherApp.Shared.Services
+namespace WeatherApp.Shared.Utilities
 {
     public class QueryStringHelper
     {

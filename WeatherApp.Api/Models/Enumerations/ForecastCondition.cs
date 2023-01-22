@@ -2,6 +2,7 @@
 {
     public class ForecastCondition : Enumeration
     {
+        // example conditions
         public static readonly ForecastCondition Cloudly = new (100, "Cloudly", "cloudly.png");
         public static readonly ForecastCondition Clearly = new (102, "Clearly", "clearly.png");
         public static readonly ForecastCondition Rain = new (105, "Rain", "rain.png");
@@ -12,11 +13,6 @@
             : base(value, description)
         {
             IconName = iconName;
-        }
-
-        public static ForecastCondition FromCode(int code)
-        {
-            return Cloudly;
         }
     }
 }

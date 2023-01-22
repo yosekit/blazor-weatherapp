@@ -28,7 +28,8 @@ builder.Services.AddHttpClient("Countries", (sp, client) =>
 });
 
 //utilities
-builder.Services.AddScoped<WeatherResponseProducer>();
+builder.Services.AddScoped<ForecastConditionDtoCreator>();
+builder.Services.AddScoped<ForecastContentModifier>();
 
 // automapper
 builder.Services.AddAutoMapper(typeof(WeatherProfile));

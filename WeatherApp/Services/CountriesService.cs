@@ -2,7 +2,7 @@
 using System.Text.Json.Nodes;
 
 using WeatherApp.Options;
-using WeatherApp.Shared.Services;
+using WeatherApp.Shared.Utilities;
 using WeatherApp.Models.Dto.Countries;
 
 namespace WeatherApp.Services

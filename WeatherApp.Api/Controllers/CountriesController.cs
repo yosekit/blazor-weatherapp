@@ -3,8 +3,8 @@
 using AspNetCore.Proxy;
 using AspNetCore.Proxy.Options;
 
+using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
-using WeatherApp.Shared.Services;
 
 namespace WeatherApp.Api.Controllers
 {

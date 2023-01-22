@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Nodes;
 using System.Net.Http.Json;
 
+using WeatherApp.Shared.Utilities;
 using WeatherApp.Options;
-using WeatherApp.Shared.Services;
 using WeatherApp.Models.Dto.Forecast;
 using WeatherApp.Models.Dto.Astronomy;
 
