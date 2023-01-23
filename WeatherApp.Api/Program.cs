@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Cors;
+using Microsoft.Extensions.FileProviders;
 
 using AspNetCore.Proxy;
 
@@ -7,8 +8,6 @@ using WeatherApp.Api.Mapping;
 using WeatherApp.Api.Utilities;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
 
 // settings
 builder.Services.AddSingleton(
@@ -51,7 +50,12 @@ builder.Services.AddCors(options => options.AddPolicy("WeatherApp",
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(
+           Path.Combine(builder.Environment.ContentRootPath, "Static")),
+    RequestPath = "/static"  
+});
 
 app.UseHttpsRedirection();
 

@@ -16,4 +16,8 @@
     <ProjectReference Include="..\WeatherApp.Shared\WeatherApp.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Static\icon\condition\" />
+  </ItemGroup>
+
 </Project>
