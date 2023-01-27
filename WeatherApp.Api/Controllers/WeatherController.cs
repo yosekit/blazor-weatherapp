@@ -7,10 +7,8 @@ using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
 using WeatherApp.Api.Models.Dtos;
 using WeatherApp.Api.Services;
-using WeatherApp.Api.Services.ContentModifiers;
-using WeatherApp.Api.Services.ContentModifiers.Responses;
-using WeatherApp.Api.Utilities;
-using System.Text.Json.Nodes;
+using WeatherApp.Api.Services.ResponseModifiers;
+using WeatherApp.Api.Services.ResponseModifiers.ResponseMethods;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -29,7 +27,7 @@ namespace WeatherApp.Api.Controllers
                 var settings = context.RequestServices.GetRequiredService<WeatherSettings>();
 
                 var queryBuilder = new QueryStringBuilder(
-                    QueryStringHelper.Parse(message.RequestUri.Query));
+                    QueryStringHelper.Parse(message.RequestUri!.Query));
 
                 // Add API key auth
                 queryBuilder.Add(settings.Auth!.Key!, settings.Auth!.Value!);
@@ -61,18 +59,14 @@ namespace WeatherApp.Api.Controllers
             queryBuilder.Add("alerts", "no");
 
             return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptionsBuilder
-                .WithAfterReceive(async (context, message) =>
+                .WithAfterReceive((context, message) =>
                 {
-                    var modifier = context.RequestServices.GetRequiredService<WeatherContentModifier>();
+                    var modifier = context.RequestServices.GetRequiredService<WeatherResponseModifier>();
 
-                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(context.Response.Body) :
-                    await message.Content.ReadAsStringAsync();
+                    modifier.Modify(message, new ForecastMethod(
+                        context.RequestServices.GetRequiredService<ForecastConditionDtoCreator>()));
 
-                    modifier.Response = new ForecastResponse(
-                        context.RequestServices.GetRequiredService<ForecastConditionDtoCreator>());
-
-                    message.Content = modifier.Modify(content);
-
+                    return Task.CompletedTask;
                 })
             .Build());
         }

@@ -1,13 +1,13 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Nodes;
 
-namespace WeatherApp.Api.Services.ContentModifiers.Responses
+namespace WeatherApp.Api.Services.ResponseModifiers.ResponseMethods
 {
-    public class ForecastResponse : IWeatherResponse
+    public class ForecastMethod : IWeatherResponseMethod
     {
         private readonly ForecastConditionDtoCreator _conditionCreator;
 
-        public ForecastResponse(ForecastConditionDtoCreator conditionCreator)
+        public ForecastMethod(ForecastConditionDtoCreator conditionCreator)
         {
             _conditionCreator = conditionCreator;
         }

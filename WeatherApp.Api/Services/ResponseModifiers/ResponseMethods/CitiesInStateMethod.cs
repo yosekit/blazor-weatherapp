@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace WeatherApp.Api.Services.ContentModifiers.Responses
+namespace WeatherApp.Api.Services.ResponseModifiers.ResponseMethods
 {
-    public class CitiesInStateResponse : ICountriesResponse
+    public class CitiesInStateMethod : ICountriesResponseMethod
     {
         public JsonObject Modify(JsonObject dom)
         {

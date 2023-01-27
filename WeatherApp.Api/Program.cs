@@ -6,7 +6,7 @@ using AspNetCore.Proxy;
 using WeatherApp.Api.Settings;
 using WeatherApp.Api.Mapping;
 using WeatherApp.Api.Services;
-using WeatherApp.Api.Services.ContentModifiers;
+using WeatherApp.Api.Services.ResponseModifiers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,8 +30,8 @@ builder.Services.AddHttpClient("Countries", (sp, client) =>
 // services
 builder.Services.AddScoped<ForecastConditionDtoCreator>();
 
-builder.Services.AddScoped<WeatherContentModifier>();
-builder.Services.AddScoped<CountriesContentModifier>();
+builder.Services.AddScoped<WeatherResponseModifier>();
+builder.Services.AddScoped<CountriesResponseModifier>();
 
 // automapper
 builder.Services.AddAutoMapper(typeof(WeatherProfile));

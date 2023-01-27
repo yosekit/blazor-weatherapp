@@ -5,9 +5,8 @@ using AspNetCore.Proxy.Options;
 
 using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
-using WeatherApp.Api.Services.ContentModifiers;
-using WeatherApp.Api.Services.ContentModifiers.Responses;
-using WeatherApp.Api.Utilities;
+using WeatherApp.Api.Services.ResponseModifiers;
+using WeatherApp.Api.Services.ResponseModifiers.ResponseMethods;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -19,7 +18,23 @@ namespace WeatherApp.Api.Controllers
         private readonly CountriesSettings _settings;
 
         private IHttpProxyOptionsBuilder _proxyOptionsBuilder = HttpProxyOptionsBuilder.Instance
-            .WithHttpClientName("Countries");
+            .WithHttpClientName("Countries")
+            .WithBeforeSend((context, message) =>
+            {
+                string? query = context.Request.QueryString.Value;
+
+                if(query is null)
+                {
+                    message.Method = HttpMethod.Get;
+                }
+                else
+                {
+                    message.Method = HttpMethod.Post;
+                    message.Content = JsonContent.Create(QueryStringHelper.Parse(query));
+                }
+
+                return Task.CompletedTask;
+            });
 
         public CountriesController(
             ILogger<CountriesController> logger, CountriesSettings settings)
@@ -33,24 +48,13 @@ namespace WeatherApp.Api.Controllers
         public Task GetCitiesOfCountry([FromQuery]string country)
         {
             return this.HttpProxyAsync(_settings.CitiesOfCountry, _proxyOptionsBuilder
-                .WithBeforeSend((context, message) =>
+                .WithAfterReceive((context, message) =>
                 {
-                    message.Method = HttpMethod.Post;
-                    message.Content = JsonContent.Create(
-                        QueryStringHelper.Parse(context.Request.QueryString.Value));
+                    var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
+
+                    modifier.ModifyAsync(message, new CitiesOfCountryMethod());
 
                     return Task.CompletedTask;
-                })
-                .WithAfterReceive(async (context, message) =>
-                {
-                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
-
-                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
-                    await message.Content.ReadAsStringAsync();
-
-                    modifier.Response = new CitiesOfCountryResponse();
-
-                    message.Content = modifier.Modify(content);
                 })
             .Build());
         }
@@ -60,24 +64,13 @@ namespace WeatherApp.Api.Controllers
         public Task GetCitiesInState([FromQuery]string country, [FromQuery]string state)
         {
             return this.HttpProxyAsync(_settings.CitiesInState, _proxyOptionsBuilder
-                .WithBeforeSend((context, message) =>
+                .WithAfterReceive((context, message) =>
                 {
-                    message.Method = HttpMethod.Post;
-                    message.Content = JsonContent.Create(
-                        QueryStringHelper.Parse(context.Request.QueryString.Value));
+                    var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
+
+                    modifier.ModifyAsync(message, new CitiesInStateMethod());
 
                     return Task.CompletedTask;
-                })
-                .WithAfterReceive(async (context, message) =>
-                {
-                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
-
-                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
-                    await message.Content.ReadAsStringAsync();
-
-                    modifier.Response = new CitiesInStateResponse();
-
-                    message.Content = modifier.Modify(content);
                 })
             .Build());
         }
@@ -87,24 +80,13 @@ namespace WeatherApp.Api.Controllers
         public Task GetStatesOfCountry([FromQuery] string country)
         {
             return this.HttpProxyAsync(_settings.StatesOfCountry, _proxyOptionsBuilder
-                .WithBeforeSend((context, message) =>
+                .WithAfterReceive((context, message) =>
                 {
-                    message.Method = HttpMethod.Post;
-                    message.Content = JsonContent.Create(
-                        QueryStringHelper.Parse(context.Request.QueryString.Value));
+                    var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
+
+                    modifier.ModifyAsync(message, new StatesOfCountryMethod());
 
                     return Task.CompletedTask;
-                })
-                .WithAfterReceive(async (context, message) =>
-                {
-                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
-
-                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
-                    await message.Content.ReadAsStringAsync();
-
-                    modifier.Response = new StatesOfCountryResponse();
-
-                    message.Content = modifier.Modify(content);
                 })
             .Build());
         }

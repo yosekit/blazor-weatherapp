@@ -1,14 +1,14 @@
 ﻿using System.Text.Json.Nodes;
 
-namespace WeatherApp.Api.Services.ContentModifiers.Responses
+namespace WeatherApp.Api.Services.ResponseModifiers.ResponseMethods
 {
-    public class StatesOfCountryResponse : ICountriesResponse
+    public class CitiesOfCountryMethod : ICountriesResponseMethod
     {
         public JsonObject Modify(JsonObject dom)
         {
             var data = dom["data"];
             dom.Remove("data");
-            dom.Add("country", data);
+            dom.Add("cities", data);
 
             dom.Remove("error");
             dom.Remove("msg");
