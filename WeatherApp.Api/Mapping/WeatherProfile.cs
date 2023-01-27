@@ -10,7 +10,7 @@ namespace WeatherApp.Api.Mapping
         {
             CreateMap<ForecastCondition, ForecastConditionDto>()
             .ForMember(dest => dest.Code, act => act.MapFrom(src => src.Value))
-            .ForMember(dest => dest.Text, act => act.MapFrom(src => src.Description))
+            .ForMember(dest => dest.Text, act => act.MapFrom(src => src.Name))
             .ForMember(dest => dest.Icon, act => act.MapFrom(src => src.IconName));
         }
     }

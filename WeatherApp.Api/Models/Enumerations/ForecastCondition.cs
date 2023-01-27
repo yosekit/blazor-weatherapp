@@ -1,16 +1,18 @@
-﻿namespace WeatherApp.Api.Models.Enumerations
-{
-    public class ForecastCondition : Enumeration
-    {
-        // example conditions
-        public static readonly ForecastCondition Cloudly = new (100, "Cloudly", "cloudly.png");
-        public static readonly ForecastCondition Clearly = new (102, "Clearly", "clearly.png");
-        public static readonly ForecastCondition Rain = new (105, "Rain", "rain.png");
+﻿using Ardalis.SmartEnum;
 
+namespace WeatherApp.Api.Models.Enumerations
+{
+    public class ForecastCondition : SmartEnum<ForecastCondition>
+    {
         public string IconName { get; }
 
-        private ForecastCondition(int value, string description, string iconName) 
-            : base(value, description)
+        // example conditions
+        public static readonly ForecastCondition Cloudly = new ("Cloudly", 100, "cloudly.png");
+        public static readonly ForecastCondition Clearly = new ("Clearly", 102, "clearly.png");
+        public static readonly ForecastCondition Rain = new ("Rain", 104, "rain.png");
+
+        private ForecastCondition(string name, int value, string iconName) 
+            : base(name, value)
         {
             IconName = iconName;
         }

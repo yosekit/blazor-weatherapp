@@ -27,7 +27,7 @@ namespace WeatherApp.Api.Services
         {
             var dtos = new List<ForecastConditionDto>();
 
-            var conditions = Enumeration.GetAll<ForecastCondition>();
+            var conditions = ForecastCondition.List;
 
             foreach (var condition in conditions)
                 dtos.Add(_mapper.Map<ForecastConditionDto>(condition));
