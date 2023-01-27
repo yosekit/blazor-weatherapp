@@ -5,6 +5,9 @@ using AspNetCore.Proxy.Options;
 
 using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
+using WeatherApp.Api.Services.ContentModifiers;
+using WeatherApp.Api.Services.ContentModifiers.Responses;
+using WeatherApp.Api.Utilities;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -38,6 +41,17 @@ namespace WeatherApp.Api.Controllers
 
                     return Task.CompletedTask;
                 })
+                .WithAfterReceive(async (context, message) =>
+                {
+                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
+
+                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
+                    await message.Content.ReadAsStringAsync();
+
+                    modifier.Response = new CitiesOfCountryResponse();
+
+                    message.Content = modifier.Modify(content);
+                })
             .Build());
         }
 
@@ -54,6 +68,17 @@ namespace WeatherApp.Api.Controllers
 
                     return Task.CompletedTask;
                 })
+                .WithAfterReceive(async (context, message) =>
+                {
+                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
+
+                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
+                    await message.Content.ReadAsStringAsync();
+
+                    modifier.Response = new CitiesInStateResponse();
+
+                    message.Content = modifier.Modify(content);
+                })
             .Build());
         }
 
@@ -69,6 +94,17 @@ namespace WeatherApp.Api.Controllers
                         QueryStringHelper.Parse(context.Request.QueryString.Value));
 
                     return Task.CompletedTask;
+                })
+                .WithAfterReceive(async (context, message) =>
+                {
+                    var modifier = context.RequestServices.GetRequiredService<CountriesContentModifier>();
+
+                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(message.Content) :
+                    await message.Content.ReadAsStringAsync();
+
+                    modifier.Response = new StatesOfCountryResponse();
+
+                    message.Content = modifier.Modify(content);
                 })
             .Build());
         }

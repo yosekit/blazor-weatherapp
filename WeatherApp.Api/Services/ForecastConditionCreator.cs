@@ -3,7 +3,7 @@
 using WeatherApp.Api.Models.Dtos;
 using WeatherApp.Api.Models.Enumerations;
 
-namespace WeatherApp.Api.Utilities
+namespace WeatherApp.Api.Services
 {
     public class ForecastConditionDtoCreator
     {

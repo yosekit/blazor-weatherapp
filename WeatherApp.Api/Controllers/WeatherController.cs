@@ -5,8 +5,12 @@ using AspNetCore.Proxy.Options;
 
 using WeatherApp.Shared.Utilities;
 using WeatherApp.Api.Settings;
-using WeatherApp.Api.Utilities;
 using WeatherApp.Api.Models.Dtos;
+using WeatherApp.Api.Services;
+using WeatherApp.Api.Services.ContentModifiers;
+using WeatherApp.Api.Services.ContentModifiers.Responses;
+using WeatherApp.Api.Utilities;
+using System.Text.Json.Nodes;
 
 namespace WeatherApp.Api.Controllers
 {
@@ -57,13 +61,18 @@ namespace WeatherApp.Api.Controllers
             queryBuilder.Add("alerts", "no");
 
             return this.HttpProxyAsync(_settings.Forecast + queryBuilder.Build(), _proxyOptionsBuilder
-                .WithAfterReceive((context, message) =>
+                .WithAfterReceive(async (context, message) =>
                 {
-                    var modifier = context.RequestServices.GetRequiredService<ForecastContentModifier>();
+                    var modifier = context.RequestServices.GetRequiredService<WeatherContentModifier>();
 
-                    message.Content = modifier.ModifyConditions(message.Content);
+                    string content = message.IsSuccessStatusCode ? BrotliContentReader.Read(context.Response.Body) :
+                    await message.Content.ReadAsStringAsync();
 
-                    return Task.CompletedTask;
+                    modifier.Response = new ForecastResponse(
+                        context.RequestServices.GetRequiredService<ForecastConditionDtoCreator>());
+
+                    message.Content = modifier.Modify(content);
+
                 })
             .Build());
         }
