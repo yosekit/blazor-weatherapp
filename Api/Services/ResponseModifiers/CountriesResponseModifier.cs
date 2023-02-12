@@ -7,7 +7,7 @@ namespace WeatherApp.Api.Services.ResponseModifiers
 {
     public class CountriesResponseModifier
     {
-        public void ModifyAsync(HttpResponseMessage message, ICountriesResponseMethod method)
+        public void Modify(HttpResponseMessage message, ICountriesResponseMethod method)
         {
             string json = ResponseContentReader.Read(message.Content);
 

@@ -10,11 +10,13 @@ namespace WeatherApp.Client.Services
 {
     public class WeatherService
     {
+        private readonly ILogger<WeatherService> _logger;
         private readonly HttpClient _httpClient;
         private readonly WeatherOptions _options;
 
-        public WeatherService(HttpClient client, WeatherOptions options)
+        public WeatherService(ILogger<WeatherService> logger, HttpClient client, WeatherOptions options)
         {
+            _logger = logger;
             _httpClient = client;
             _options = options;
         }
@@ -51,7 +53,7 @@ namespace WeatherApp.Client.Services
                     {
                         return default(T);
                     }
-
+                    
                     return await response.Content.ReadFromJsonAsync<T>();
                 }
                 else

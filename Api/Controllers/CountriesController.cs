@@ -52,7 +52,7 @@ namespace WeatherApp.Api.Controllers
                 {
                     var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
 
-                    modifier.ModifyAsync(message, new CitiesOfCountryMethod());
+                    modifier.Modify(message, new CitiesOfCountryMethod());
 
                     return Task.CompletedTask;
                 })
@@ -68,7 +68,7 @@ namespace WeatherApp.Api.Controllers
                 {
                     var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
 
-                    modifier.ModifyAsync(message, new CitiesInStateMethod());
+                    modifier.Modify(message, new CitiesInStateMethod());
 
                     return Task.CompletedTask;
                 })
@@ -84,7 +84,7 @@ namespace WeatherApp.Api.Controllers
                 {
                     var modifier = context.RequestServices.GetRequiredService<CountriesResponseModifier>();
 
-                    modifier.ModifyAsync(message, new StatesOfCountryMethod());
+                    modifier.Modify(message, new StatesOfCountryMethod());
 
                     return Task.CompletedTask;
                 })
