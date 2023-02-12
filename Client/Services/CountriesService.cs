@@ -41,7 +41,17 @@ namespace WeatherApp.Client.Services
                 _options.CitiesInState + queryBuilder.Build());
         }
 
-        private async Task<T> GetAsync<T>(string uri)
+        public async Task<StatesDto> GetStatesOfCountry(string country)
+        {
+            var queryBuilder = new QueryStringBuilder();
+
+			queryBuilder.Add(nameof(country), country);
+
+            return await GetAsync<StatesDto>(
+                _options.StatesOfCountry + queryBuilder.Build());
+		}
+
+		private async Task<T> GetAsync<T>(string uri)
         {
             try
             {

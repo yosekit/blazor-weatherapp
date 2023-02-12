@@ -4,7 +4,7 @@ namespace WeatherApp.Client.Models.Dto.Countries
 {
     public class CitiesDto
     {
-        [JsonPropertyName("data")]
+        [JsonPropertyName("cities")]
         public string[] Cities { get; set; }
     }
 }

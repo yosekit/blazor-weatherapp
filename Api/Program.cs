@@ -1,6 +1,3 @@
-using Microsoft.AspNetCore.Cors;
-using Microsoft.Extensions.FileProviders;
-
 using AspNetCore.Proxy;
 
 using WeatherApp.Api.Settings;
@@ -9,6 +6,9 @@ using WeatherApp.Api.Services;
 using WeatherApp.Api.Services.ResponseModifiers;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddControllersWithViews(); //
+builder.Services.AddRazorPages(); //
 
 // settings
 builder.Services.AddSingleton(
@@ -42,30 +42,28 @@ builder.Services.AddProxies();
 // controllers
 builder.Services.AddControllers();
 
-// cors
-builder.Services.AddCors(options => options.AddPolicy("WeatherApp",
-    builder =>
-    {
-        builder.WithOrigins("https://localhost:7114")
-        .AllowAnyMethod()
-        .AllowAnyHeader();
-    }));
 
 var app = builder.Build();
 
-app.UseStaticFiles(new StaticFileOptions()
+if (app.Environment.IsDevelopment())
 {
-    FileProvider = new PhysicalFileProvider(
-           Path.Combine(builder.Environment.ContentRootPath, "Static")),
-    RequestPath = "/static"  
-});
+    app.UseWebAssemblyDebugging();
+}
+else
+{
+    app.UseExceptionHandler("/Error");
+    app.UseHsts();
+}
 
 app.UseHttpsRedirection();
 
-app.UseCors("WeatherApp");
+app.UseBlazorFrameworkFiles(); //
+app.UseStaticFiles();
 
-app.UseAuthorization();
+app.UseRouting(); //
 
+app.MapRazorPages(); //
 app.MapControllers();
+app.MapFallbackToFile("index.html"); //
 
 app.Run();
