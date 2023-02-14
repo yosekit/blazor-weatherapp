@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace WeatherApp.Client.Models.Dto.Countries
+namespace WeatherApp.Client.Application.Models.Dto.Countries
 {
     public class CitiesDto
     {

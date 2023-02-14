@@ -1,4 +1,4 @@
-﻿namespace WeatherApp.Client.Options
+﻿namespace WeatherApp.Client.Application.Options
 {
     public class CountriesOptions
     {

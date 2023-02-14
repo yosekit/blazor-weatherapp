@@ -2,11 +2,11 @@
 using System.Net.Http.Json;
 
 using WeatherApp.Shared.Utilities;
-using WeatherApp.Client.Options;
-using WeatherApp.Client.Models.Dto.Forecast;
-using WeatherApp.Client.Models.Dto.Astronomy;
+using WeatherApp.Client.Application.Models.Dto.Astronomy;
+using WeatherApp.Client.Application.Models.Dto.Forecast;
+using WeatherApp.Client.Application.Options;
 
-namespace WeatherApp.Client.Services
+namespace WeatherApp.Client.Application.Services
 {
     public class WeatherService
     {
@@ -34,7 +34,7 @@ namespace WeatherApp.Client.Services
         public async Task<AstronomyDto> GetAstronomyAsync(string city)
         {
             var queryBuilder = new QueryStringBuilder();
-            
+
             queryBuilder.Add(nameof(city), city);
 
             return await GetAsync<AstronomyDto>(
@@ -51,9 +51,9 @@ namespace WeatherApp.Client.Services
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return default(T);
+                        return default;
                     }
-                    
+
                     return await response.Content.ReadFromJsonAsync<T>();
                 }
                 else
@@ -61,7 +61,8 @@ namespace WeatherApp.Client.Services
                     var content = await response.Content.ReadAsStringAsync();
                     var error = JsonNode.Parse(content)!["error"];
 
-                    throw new Exception($"Http status code: {response.StatusCode} code: {error!["code"]} message: {error!["message"]}");
+                    throw new Exception($"Http status code: {response.StatusCode} " +
+                        $"code: {error!["code"]} message: {error!["message"]} source: {error!["source"]}");
                 }
             }
             catch (Exception)

@@ -7,9 +7,6 @@ using WeatherApp.Api.Services.ResponseModifiers;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddControllersWithViews(); //
-builder.Services.AddRazorPages(); //
-
 // settings
 builder.Services.AddSingleton(
     builder.Configuration.GetSection(WeatherSettings.JsonName).Get<WeatherSettings>());
@@ -49,21 +46,20 @@ if (app.Environment.IsDevelopment())
 {
     app.UseWebAssemblyDebugging();
 }
-else
-{
-    app.UseExceptionHandler("/Error");
-    app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 
-app.UseBlazorFrameworkFiles(); //
+app.UseBlazorFrameworkFiles();
 app.UseStaticFiles();
 
-app.UseRouting(); //
+app.UseRouting();
 
-app.MapRazorPages(); //
 app.MapControllers();
-app.MapFallbackToFile("index.html"); //
+app.Map("api/{**slug}", context =>
+{
+	context.Response.StatusCode = StatusCodes.Status404NotFound;
+	return Task.CompletedTask;
+});
+app.MapFallbackToFile("{**slug}", "index.html");
 
 app.Run();

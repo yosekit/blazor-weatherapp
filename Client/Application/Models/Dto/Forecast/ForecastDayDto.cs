@@ -1,9 +1,8 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using WeatherApp.Client.Application.Models.Dto.Astronomy;
 
-using WeatherApp.Client.Models.Dto.Astronomy;
-
-namespace WeatherApp.Client.Models.Dto.Forecast
+namespace WeatherApp.Client.Application.Models.Dto.Forecast
 {
     public class ForecastDayDto
     {

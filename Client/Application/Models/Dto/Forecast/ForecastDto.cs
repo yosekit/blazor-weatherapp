@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace WeatherApp.Client.Models.Dto.Forecast
+namespace WeatherApp.Client.Application.Models.Dto.Forecast
 {
     public class ForecastDto
     {

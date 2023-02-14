@@ -1,11 +1,11 @@
 ﻿using System.Net.Http.Json;
 using System.Text.Json.Nodes;
 
-using WeatherApp.Client.Options;
 using WeatherApp.Shared.Utilities;
-using WeatherApp.Client.Models.Dto.Countries;
+using WeatherApp.Client.Application.Models.Dto.Countries;
+using WeatherApp.Client.Application.Options;
 
-namespace WeatherApp.Client.Services
+namespace WeatherApp.Client.Application.Services
 {
     public class CountriesService
     {
@@ -45,39 +45,39 @@ namespace WeatherApp.Client.Services
         {
             var queryBuilder = new QueryStringBuilder();
 
-			queryBuilder.Add(nameof(country), country);
+            queryBuilder.Add(nameof(country), country);
 
             return await GetAsync<StatesDto>(
                 _options.StatesOfCountry + queryBuilder.Build());
-		}
+        }
 
-		private async Task<T> GetAsync<T>(string uri)
+        private async Task<T> GetAsync<T>(string uri)
         {
             try
             {
                 var response = await _httpClient.GetAsync(uri);
 
-                var node = JsonNode.Parse(await response.Content.ReadAsStringAsync());
-
-                if(!response.IsSuccessStatusCode ||
-                    bool.Parse(node["error"].ToString()))
-                {
-                    throw new Exception($"Error: {node["msg"]}");
-                }
-                else
+                if (response.IsSuccessStatusCode)
                 {
                     if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
                     {
-                        return default(T);
+                        return default;
                     }
 
                     return await response.Content.ReadFromJsonAsync<T>();
+                }
+                else
+                {
+                    var content = await response.Content.ReadAsStringAsync();
+                    var error = JsonNode.Parse(content)!["error"];
+
+                    throw new Exception($"Http status code: {response.StatusCode} " +
+                        $"code: {error!["code"]} message: {error!["message"]} source: {error!["source"]}");
                 }
             }
             catch (Exception e)
             {
                 //Log exception
-                _logger.LogDebug(e.Message);
                 throw;
             }
         }
