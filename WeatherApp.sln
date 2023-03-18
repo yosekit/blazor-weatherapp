@@ -3,11 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32602.215
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.Api", "Api\WeatherApp.Api.csproj", "{1A2C054E-53CF-490F-AC98-674224C11574}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Api", "Api\WeatherApp.Api.csproj", "{1A2C054E-53CF-490F-AC98-674224C11574}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.Client", "Client\WeatherApp.Client.csproj", "{11CADE8F-5A47-4000-9ECF-5641E40D3319}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Client", "Client\WeatherApp.Client.csproj", "{11CADE8F-5A47-4000-9ECF-5641E40D3319}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeatherApp.Shared", "Shared\WeatherApp.Shared.csproj", "{8F72975C-2223-4705-9630-326EC52A6C33}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeatherApp.Shared", "Shared\WeatherApp.Shared.csproj", "{8F72975C-2223-4705-9630-326EC52A6C33}"
+EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{804D265D-1321-43B1-A4F9-070EF7C6B617}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{8F72975C-2223-4705-9630-326EC52A6C33}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F72975C-2223-4705-9630-326EC52A6C33}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F72975C-2223-4705-9630-326EC52A6C33}.Release|Any CPU.Build.0 = Release|Any CPU
+		{804D265D-1321-43B1-A4F9-070EF7C6B617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{804D265D-1321-43B1-A4F9-070EF7C6B617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{804D265D-1321-43B1-A4F9-070EF7C6B617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{804D265D-1321-43B1-A4F9-070EF7C6B617}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
